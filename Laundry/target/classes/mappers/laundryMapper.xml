@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laundry.mappers.laundry">
+	<!-- 비회원 주문 목록 -->
+	<select id="list" resultType="com.laundry.domain.laundryVO">
+		select
+		*
+		from customer
+	</select>
+
+	<!-- 비회원 주문 작성 -->
+	<insert id="write" parameterType="com.laundry.domain.laundryVO">
+		insert into
+		customer(name,phone1,phone2,phone3, address, addressd,clothing1,
+		count1,clothing2, count2,clothing3, count3, detail,state)
+		values(#{name},
+		#{phone1},
+		#{phone2}, #{phone3}, #{address},#{addressd},#{clothing1},
+		#{count1},#{clothing2}, #{count2},#{clothing3},
+		#{count3}, #{detail},'준비중')
+	</insert>
+
+
+	<!-- 비회원 주문 검색 -->
+	<select id="search" parameterType="hashMap"
+		resultType="com.laundry.domain.laundryVO">
+		select
+		cno,name,phone1,phone2,phone3, address,clothing1,
+		count1,clothing2, count2,clothing3, count3, detail,state
+		from customer where
+		phone3 LIKE #{tell3}
+	</select>
+
+	<!-- 비회원 주문 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete
+		from customer
+		where cno =
+		#{cno}
+	</delete>
+
+	<!-- 비회원 주문 완료 -->
+	<update id="complete" parameterType="int">
+		update customer
+		set
+		state = '완료'
+		where cno = #{cno}
+	</update>
+
+	<!-- 회원가입 -->
+	<insert id="join" parameterType="com.laundry.domain.memberVO">
+		insert into
+		member(userid,name,phone1,phone2,phone3, address,addressd)
+		values(#{userid},#{name}, #{phone1},
+		#{phone2}, #{phone3}, #{address}, #{addressd})
+	</insert>
+
+	<!-- 회원 목록 -->
+	<select id="mlist" resultType="com.laundry.domain.memberVO">
+		select * from member
+	</select>
+
+	<!-- 로그인 -->
+	<select id="login" resultType="com.laundry.domain.memberVO">
+		select name
+		from member
+		where
+		userid=#{userid}
+	</select>
+
+	<!-- 회원 주문 목록 -->
+	<select id="molist" resultType="com.laundry.domain.laundryVO">
+		select*
+		FROM member m,m_order mo
+		WHERE m.userid=mo.userid
+	</select>
+
+
+
+	<!-- 회원 검색 -->
+	<select id="msearch" parameterType="hashMap"
+		resultType="com.laundry.domain.laundryVO">
+		select*
+		FROM member m,m_order mo WHERE m.userid=mo.userid
+		and
+		m.userid LIKE #{userid}
+	</select>
+
+	<!-- 회원 삭제 -->
+	<delete id="mdelete" parameterType="String">
+		delete
+		from member
+		where userid
+		like #{userid}
+	</delete>
+
+
+	<!-- 회원 주문 작성 -->
+	<insert id="mwrite" parameterType="com.laundry.domain.laundryVO">
+		insert into
+		m_order(userid,clothing1,count1,clothing2, count2,clothing3, count3,
+		detail,state)
+		values(#{userid},#{clothing1},#{count1},#{clothing2},
+		#{count2},#{clothing3},
+		#{count3}, #{detail},'준비중')
+	</insert>
+
+	<!-- 회원 주문 삭제 -->
+	<delete id="modelete" parameterType="int">
+		delete
+		from m_order
+		where
+		mono like #{mono}
+	</delete>
+	
+	<!-- 비회원 주문 완료 -->
+	<update id="mocomplete" parameterType="int">
+		update m_order
+		set
+		state = '완료'
+		where
+		mono like #{mono}
+	</update>
+
+
+
+
+
+</mapper>
